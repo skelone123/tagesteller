@@ -220,12 +220,33 @@ const OFF_FIELDS ='code,product_name,product_name_de,brands,nutriments,serving_q
 
 /* ---------- Speicher ---------- */
 function blank(){ return {v:1,entries:[],custom:[],recipes:[],saved:[],fav:[],recent:[],weights:[],goalKg:null,targets:Object.assign({},DGE_W65),welcomed:false}; }
-function load(){
-  try{ const r = localStorage.getItem(STORE); if(r){ const o = JSON.parse(r); const b = blank(); Object.assign(b,o); b.targets = Object.assign({},DGE_W65,o.targets||{}); return b; } }catch(e){}
-  return blank();
+/* Das Tagebuch liegt in IndexedDB (mehrere hundert MB möglich).
+   Ältere Versionen nutzten localStorage (ca. 5 MB): diese Daten werden beim ersten Start übernommen
+   und bleiben dort unverändert als Reserve liegen. Fehlt IndexedDB, wird weiter localStorage genutzt. */
+const DB_NAME = 'tagesteller', DB_STORE = 'kv';
+let idb = null, useLS = false;
+function normalize(o){ const b = blank(); if(o && typeof o==='object'){ Object.assign(b,o); b.targets = Object.assign({},DGE_W65,o.targets||{}); } return b; }
+function lsLoad(){ try{ const r = localStorage.getItem(STORE); return r ? JSON.parse(r) : null; }catch(e){ return null; } }
+function idbOpen(){ return new Promise((res,rej)=>{ let r; try{ r = indexedDB.open(DB_NAME,1); }catch(e){ rej(e); return; }
+  r.onupgradeneeded = ()=>r.result.createObjectStore(DB_STORE); r.onsuccess = ()=>res(r.result); r.onerror = ()=>rej(r.error); r.onblocked = ()=>rej(new Error('blocked')); }); }
+function idbGet(k){ return new Promise((res,rej)=>{ const q = idb.transaction(DB_STORE,'readonly').objectStore(DB_STORE).get(k); q.onsuccess = ()=>res(q.result); q.onerror = ()=>rej(q.error); }); }
+function idbPut(k,v){ return new Promise((res,rej)=>{ const tx = idb.transaction(DB_STORE,'readwrite'); tx.objectStore(DB_STORE).put(v,k); tx.oncomplete = ()=>res(); tx.onerror = ()=>rej(tx.error); tx.onabort = ()=>rej(tx.error); }); }
+async function loadState(){
+  try{
+    if(!window.indexedDB) throw new Error('no idb');
+    idb = await idbOpen();
+    let o = await idbGet('state');
+    if(!o){ const old = lsLoad(); if(old){ await idbPut('state', old); o = old; } }
+    return normalize(o);
+  }catch(e){ idb = null; useLS = true; return normalize(lsLoad()); }
 }
-let S = load();
-function save(){ try{ localStorage.setItem(STORE, JSON.stringify(S)); }catch(e){ toast('Speichern nicht möglich'); } }
+let S = blank();
+function save(){
+  if(useLS || !idb){ try{ localStorage.setItem(STORE, JSON.stringify(S)); }catch(e){ toast('Speichern nicht möglich – Speicher voll?'); } return; }
+  // put() kopiert den Stand sofort; Schreibvorgänge laufen in Reihenfolge ab
+  try{ const tx = idb.transaction(DB_STORE,'readwrite'); tx.objectStore(DB_STORE).put(S,'state'); tx.onerror = tx.onabort = ()=>toast('Speichern nicht möglich'); }
+  catch(e){ toast('Speichern nicht möglich'); }
+}
 try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(e){}
 
 /* ---------- Hilfen ---------- */
@@ -450,11 +471,13 @@ function openPicker(opt){
   let q = '', offRes = null, offState = '', cat = null, offTimer = null;
   const mode = opt.mode||'diary';
   const pick = f=>{
+    clearTimeout(offTimer);
     if(mode==='compare'){ keepOff(f); save(); opt.onPick(f); return; }
     openSheet(body=>amountSheet(body,{food:f,mode,meal:opt.meal,date:opt.date,onPick:opt.onPick}));
   };
   openSheet(body=>{
     const draw = ()=>{
+      if(!$('#pres',body)) return; // Suchfenster ist inzwischen geschlossen oder verdeckt
       const res = q.trim() ? searchFoods(q) : [];
       let html = '';
       if(q.trim()){
@@ -901,7 +924,7 @@ function loadDemo(){
 }
 
 /* ---------- Start ---------- */
-render();
+loadState().then(st=>{ S = st; render(); });
 document.addEventListener('visibilitychange',()=>{ if(!document.hidden && view==='today' && !$('.sheet-wrap')){ /* Tageswechsel über Nacht */ } });
 if('serviceWorker' in navigator && location.protocol==='https:' && !location.hostname.endsWith('claude.ai') && !location.hostname.includes('claudeusercontent')){
   navigator.serviceWorker.register('sw.js').catch(()=>{});
