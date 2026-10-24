@@ -1,0 +1,1800 @@
+[
+ {
+  "name": "Apfel",
+  "cat": "Obst",
+  "portions": [
+   {
+    "l": "1 Apfel (mittel)",
+    "g": 150
+   }
+  ],
+  "bls": "F110100"
+ },
+ {
+  "name": "Banane",
+  "cat": "Obst",
+  "portions": [
+   {
+    "l": "1 Banane",
+    "g": 120
+   }
+  ],
+  "bls": "F503100"
+ },
+ {
+  "name": "Orange",
+  "cat": "Obst",
+  "portions": [
+   {
+    "l": "1 Orange",
+    "g": 150
+   }
+  ],
+  "bls": "F603100"
+ },
+ {
+  "name": "Mandarine / Clementine",
+  "cat": "Obst",
+  "portions": [
+   {
+    "l": "1 Stück",
+    "g": 70
+   }
+  ],
+  "bls": "F606100"
+ },
+ {
+  "name": "Birne",
+  "cat": "Obst",
+  "portions": [
+   {
+    "l": "1 Birne",
+    "g": 160
+   }
+  ],
+  "bls": "F130100"
+ },
+ {
+  "name": "Erdbeeren",
+  "cat": "Obst",
+  "portions": [
+   {
+    "l": "1 Schälchen",
+    "g": 150
+   },
+   {
+    "l": "1 Erdbeere",
+    "g": 15
+   }
+  ],
+  "bls": "F301100"
+ },
+ {
+  "name": "Heidelbeeren",
+  "cat": "Obst",
+  "portions": [
+   {
+    "l": "1 Handvoll",
+    "g": 80
+   }
+  ],
+  "bls": "F304100"
+ },
+ {
+  "name": "Himbeeren",
+  "cat": "Obst",
+  "portions": [
+   {
+    "l": "1 Handvoll",
+    "g": 80
+   }
+  ],
+  "bls": "F302100"
+ },
+ {
+  "name": "Weintrauben",
+  "cat": "Obst",
+  "portions": [
+   {
+    "l": "1 Handvoll",
+    "g": 100
+   }
+  ],
+  "bls": "F310100"
+ },
+ {
+  "name": "Kiwi",
+  "cat": "Obst",
+  "portions": [
+   {
+    "l": "1 Kiwi",
+    "g": 75
+   }
+  ],
+  "bls": "F514100"
+ },
+ {
+  "name": "Ananas",
+  "cat": "Obst",
+  "portions": [
+   {
+    "l": "1 Scheibe",
+    "g": 80
+   }
+  ],
+  "bls": "F501100"
+ },
+ {
+  "name": "Mango",
+  "cat": "Obst",
+  "portions": [
+   {
+    "l": "1/2 Mango",
+    "g": 150
+   }
+  ],
+  "bls": "F516100"
+ },
+ {
+  "name": "Pfirsich / Nektarine",
+  "cat": "Obst",
+  "portions": [
+   {
+    "l": "1 Stück",
+    "g": 130
+   }
+  ],
+  "bls": "F203100"
+ },
+ {
+  "name": "Pflaumen / Zwetschgen",
+  "cat": "Obst",
+  "portions": [
+   {
+    "l": "1 Stück",
+    "g": 35
+   }
+  ],
+  "bls": "F220100"
+ },
+ {
+  "name": "Kirschen",
+  "cat": "Obst",
+  "portions": [
+   {
+    "l": "1 Handvoll",
+    "g": 100
+   }
+  ],
+  "bls": "F211100"
+ },
+ {
+  "name": "Wassermelone",
+  "cat": "Obst",
+  "portions": [
+   {
+    "l": "1 Stück",
+    "g": 250
+   }
+  ],
+  "bls": "F535100"
+ },
+ {
+  "name": "Avocado",
+  "cat": "Obst",
+  "portions": [
+   {
+    "l": "1/2 Avocado",
+    "g": 70
+   }
+  ],
+  "bls": "F502100"
+ },
+ {
+  "name": "Rosinen",
+  "cat": "Obst",
+  "portions": [
+   {
+    "l": "1 EL",
+    "g": 15
+   }
+  ],
+  "bls": "F840100"
+ },
+ {
+  "name": "Aprikosen, getrocknet",
+  "cat": "Obst",
+  "portions": [
+   {
+    "l": "1 Stück",
+    "g": 8
+   }
+  ],
+  "bls": "F201400"
+ },
+ {
+  "name": "Apfelmus, ungesüßt",
+  "cat": "Obst",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 125
+   }
+  ],
+  "bls": "Y864112"
+ },
+ {
+  "name": "Tomate",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Tomate",
+    "g": 100
+   },
+   {
+    "l": "1 Cocktailtomate",
+    "g": 15
+   }
+  ],
+  "bls": "G561100"
+ },
+ {
+  "name": "Gurke",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1/2 Gurke",
+    "g": 200
+   },
+   {
+    "l": "1 Scheibe",
+    "g": 10
+   }
+  ],
+  "bls": "G520100"
+ },
+ {
+  "name": "Karotte / Möhre",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Möhre",
+    "g": 80
+   }
+  ],
+  "bls": "G620100"
+ },
+ {
+  "name": "Paprika, rot",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Paprika",
+    "g": 160
+   }
+  ],
+  "bls": "G543100"
+ },
+ {
+  "name": "Brokkoli, gegart",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 150
+   }
+  ],
+  "bls": "G312132"
+ },
+ {
+  "name": "Blumenkohl, gegart",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 150
+   }
+  ],
+  "bls": "G311132"
+ },
+ {
+  "name": "Spinat, gegart",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 150
+   }
+  ],
+  "bls": "G211152"
+ },
+ {
+  "name": "Blattsalat (Kopfsalat)",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Schale",
+    "g": 50
+   }
+  ],
+  "bls": "G105100"
+ },
+ {
+  "name": "Zucchini, gegart",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 150
+   }
+  ],
+  "bls": "G582152"
+ },
+ {
+  "name": "Zwiebel",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Zwiebel",
+    "g": 80
+   }
+  ],
+  "bls": "G480100"
+ },
+ {
+  "name": "Kartoffeln, gekocht",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Kartoffel (mittel)",
+    "g": 100
+   },
+   {
+    "l": "1 Portion",
+    "g": 200
+   }
+  ],
+  "bls": "K110132"
+ },
+ {
+  "name": "Bratkartoffeln",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 200
+   }
+  ],
+  "bls": "X651043"
+ },
+ {
+  "name": "Pommes frites",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 150
+   }
+  ],
+  "bls": "X654042"
+ },
+ {
+  "name": "Kartoffelpüree",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 200
+   }
+  ],
+  "bls": "X634012"
+ },
+ {
+  "name": "Erbsen, gegart",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 150
+   }
+  ],
+  "bls": "G760232"
+ },
+ {
+  "name": "Grüne Bohnen, gegart",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 150
+   }
+  ],
+  "bls": "G710132"
+ },
+ {
+  "name": "Champignons",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 100
+   }
+  ],
+  "bls": "K701100"
+ },
+ {
+  "name": "Kohlrabi",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Kohlrabi",
+    "g": 250
+   }
+  ],
+  "bls": "G331100"
+ },
+ {
+  "name": "Weißkohl / Spitzkohl",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 150
+   }
+  ],
+  "bls": "G342100"
+ },
+ {
+  "name": "Rotkohl (gegart, aus dem Glas)",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 150
+   }
+  ],
+  "bls": "G341900"
+ },
+ {
+  "name": "Sauerkraut",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 150
+   }
+  ],
+  "bls": "G345032"
+ },
+ {
+  "name": "Rote Bete, gegart",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 100
+   }
+  ],
+  "bls": "G613152"
+ },
+ {
+  "name": "Spargel, gegart",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 250
+   }
+  ],
+  "bls": "G450132"
+ },
+ {
+  "name": "Lauch / Porree",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Stange",
+    "g": 150
+   }
+  ],
+  "bls": "G470132"
+ },
+ {
+  "name": "Mais (Dose)",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 kleine Dose (abgetropft)",
+    "g": 140
+   },
+   {
+    "l": "1 EL",
+    "g": 20
+   }
+  ],
+  "bls": "G570902"
+ },
+ {
+  "name": "Linsen, gegart",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 150
+   }
+  ],
+  "bls": "H730132"
+ },
+ {
+  "name": "Kichererbsen, gegart",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 150
+   }
+  ],
+  "bls": "G770432"
+ },
+ {
+  "name": "Weiße Bohnen, gegart",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 150
+   }
+  ],
+  "bls": "H740132"
+ },
+ {
+  "name": "Tomaten, passiert",
+  "cat": "Gemüse",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 100
+   }
+  ],
+  "bls": "R161200"
+ },
+ {
+  "name": "Vollkornbrot",
+  "cat": "Brot & Getreide",
+  "portions": [
+   {
+    "l": "1 Scheibe",
+    "g": 50
+   }
+  ],
+  "bls": "B101000"
+ },
+ {
+  "name": "Mischbrot / Graubrot",
+  "cat": "Brot & Getreide",
+  "portions": [
+   {
+    "l": "1 Scheibe",
+    "g": 45
+   }
+  ],
+  "bls": "B271000"
+ },
+ {
+  "name": "Toastbrot",
+  "cat": "Brot & Getreide",
+  "portions": [
+   {
+    "l": "1 Scheibe",
+    "g": 25
+   }
+  ],
+  "bls": "B314000"
+ },
+ {
+  "name": "Brötchen (Weizen)",
+  "cat": "Brot & Getreide",
+  "portions": [
+   {
+    "l": "1 Brötchen",
+    "g": 55
+   }
+  ],
+  "bls": "B511000"
+ },
+ {
+  "name": "Vollkornbrötchen",
+  "cat": "Brot & Getreide",
+  "portions": [
+   {
+    "l": "1 Brötchen",
+    "g": 60
+   }
+  ],
+  "bls": "B401000"
+ },
+ {
+  "name": "Knäckebrot (Roggen)",
+  "cat": "Brot & Getreide",
+  "portions": [
+   {
+    "l": "1 Scheibe",
+    "g": 10
+   }
+  ],
+  "bls": "B6A2100"
+ },
+ {
+  "name": "Brezel / Laugengebäck",
+  "cat": "Brot & Getreide",
+  "portions": [
+   {
+    "l": "1 Brezel",
+    "g": 85
+   }
+  ],
+  "bls": "B723000"
+ },
+ {
+  "name": "Croissant (Butter)",
+  "cat": "Brot & Getreide",
+  "portions": [
+   {
+    "l": "1 Croissant",
+    "g": 60
+   }
+  ],
+  "bls": "D771600"
+ },
+ {
+  "name": "Haferflocken",
+  "cat": "Brot & Getreide",
+  "portions": [
+   {
+    "l": "4 EL",
+    "g": 40
+   }
+  ],
+  "bls": "C133000"
+ },
+ {
+  "name": "Müsli, ungesüßt",
+  "cat": "Brot & Getreide",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 50
+   }
+  ],
+  "bls": "C512000"
+ },
+ {
+  "name": "Cornflakes",
+  "cat": "Brot & Getreide",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 30
+   }
+  ],
+  "bls": "C515000"
+ },
+ {
+  "name": "Nudeln, gekocht",
+  "cat": "Brot & Getreide",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 200
+   }
+  ],
+  "bls": "E401032"
+ },
+ {
+  "name": "Vollkornnudeln, gekocht",
+  "cat": "Brot & Getreide",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 200
+   }
+  ],
+  "bls": "E500032"
+ },
+ {
+  "name": "Reis, gekocht",
+  "cat": "Brot & Getreide",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 150
+   }
+  ],
+  "bls": "C352032"
+ },
+ {
+  "name": "Naturreis, gekocht",
+  "cat": "Brot & Getreide",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 150
+   }
+  ],
+  "bls": "C351032"
+ },
+ {
+  "name": "Couscous, gekocht",
+  "cat": "Brot & Getreide",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 150
+   }
+  ],
+  "bls": "C119232"
+ },
+ {
+  "name": "Milch 3,5 %",
+  "cat": "Milch, Käse & Eier",
+  "portions": [
+   {
+    "l": "1 Glas",
+    "g": 200
+   },
+   {
+    "l": "1 Schuss in Kaffee",
+    "g": 20
+   }
+  ],
+  "bls": "M111300"
+ },
+ {
+  "name": "Milch 1,5 %",
+  "cat": "Milch, Käse & Eier",
+  "portions": [
+   {
+    "l": "1 Glas",
+    "g": 200
+   },
+   {
+    "l": "1 Schuss in Kaffee",
+    "g": 20
+   }
+  ],
+  "bls": "M113200"
+ },
+ {
+  "name": "Joghurt natur 3,5 %",
+  "cat": "Milch, Käse & Eier",
+  "portions": [
+   {
+    "l": "1 Becher",
+    "g": 150
+   }
+  ],
+  "bls": "M141300"
+ },
+ {
+  "name": "Joghurt natur 1,5 %",
+  "cat": "Milch, Käse & Eier",
+  "portions": [
+   {
+    "l": "1 Becher",
+    "g": 150
+   }
+  ],
+  "bls": "M141200"
+ },
+ {
+  "name": "Sahnejoghurt / Griechischer Joghurt 10 %",
+  "cat": "Milch, Käse & Eier",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 150
+   }
+  ],
+  "bls": "M141500"
+ },
+ {
+  "name": "Fruchtjoghurt",
+  "cat": "Milch, Käse & Eier",
+  "portions": [
+   {
+    "l": "1 Becher",
+    "g": 150
+   }
+  ],
+  "bls": "M241300"
+ },
+ {
+  "name": "Magerquark",
+  "cat": "Milch, Käse & Eier",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 125
+   }
+  ],
+  "bls": "M713100"
+ },
+ {
+  "name": "Speisequark 20 %",
+  "cat": "Milch, Käse & Eier",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 125
+   }
+  ],
+  "bls": "M713300"
+ },
+ {
+  "name": "Körniger Frischkäse (Hüttenkäse)",
+  "cat": "Milch, Käse & Eier",
+  "portions": [
+   {
+    "l": "1 Becher",
+    "g": 200
+   }
+  ],
+  "bls": "M711300"
+ },
+ {
+  "name": "Gouda",
+  "cat": "Milch, Käse & Eier",
+  "portions": [
+   {
+    "l": "1 Scheibe",
+    "g": 25
+   }
+  ],
+  "bls": "M402600"
+ },
+ {
+  "name": "Emmentaler",
+  "cat": "Milch, Käse & Eier",
+  "portions": [
+   {
+    "l": "1 Scheibe",
+    "g": 25
+   }
+  ],
+  "bls": "M304600"
+ },
+ {
+  "name": "Camembert / Brie",
+  "cat": "Milch, Käse & Eier",
+  "portions": [
+   {
+    "l": "1 Ecke",
+    "g": 30
+   }
+  ],
+  "bls": "M602600"
+ },
+ {
+  "name": "Mozzarella",
+  "cat": "Milch, Käse & Eier",
+  "portions": [
+   {
+    "l": "1 Kugel",
+    "g": 125
+   }
+  ],
+  "bls": "M032100"
+ },
+ {
+  "name": "Feta / Hirtenkäse",
+  "cat": "Milch, Käse & Eier",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 50
+   }
+  ],
+  "bls": "M012200"
+ },
+ {
+  "name": "Frischkäse (Doppelrahm)",
+  "cat": "Milch, Käse & Eier",
+  "portions": [
+   {
+    "l": "1 Portion (Brot)",
+    "g": 20
+   }
+  ],
+  "bls": "M710800"
+ },
+ {
+  "name": "Butter",
+  "cat": "Milch, Käse & Eier",
+  "portions": [
+   {
+    "l": "1 Portion (Brot)",
+    "g": 10
+   },
+   {
+    "l": "1 TL",
+    "g": 5
+   }
+  ],
+  "bls": "Q611000"
+ },
+ {
+  "name": "Sahne 30 %",
+  "cat": "Milch, Käse & Eier",
+  "portions": [
+   {
+    "l": "1 EL",
+    "g": 15
+   }
+  ],
+  "bls": "M173800"
+ },
+ {
+  "name": "Ei (Hühnerei)",
+  "cat": "Milch, Käse & Eier",
+  "portions": [
+   {
+    "l": "1 Ei (Größe M)",
+    "g": 55
+   }
+  ],
+  "bls": "E111100"
+ },
+ {
+  "name": "Hähnchenbrust, gegart",
+  "cat": "Fleisch, Wurst & Fisch",
+  "portions": [
+   {
+    "l": "1 Stück",
+    "g": 150
+   }
+  ],
+  "bls": "V416172"
+ },
+ {
+  "name": "Putenbrust, gegart",
+  "cat": "Fleisch, Wurst & Fisch",
+  "portions": [
+   {
+    "l": "1 Stück",
+    "g": 150
+   }
+  ],
+  "bls": "V486172"
+ },
+ {
+  "name": "Brathähnchen mit Haut",
+  "cat": "Fleisch, Wurst & Fisch",
+  "portions": [
+   {
+    "l": "1 Keule",
+    "g": 150
+   }
+  ],
+  "bls": "Y560322"
+ },
+ {
+  "name": "Rinderhackfleisch, gebraten",
+  "cat": "Fleisch, Wurst & Fisch",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 125
+   }
+  ],
+  "bls": "U010132"
+ },
+ {
+  "name": "Gemischtes Hackfleisch, gebraten",
+  "cat": "Fleisch, Wurst & Fisch",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 125
+   }
+  ],
+  "bls": "U040132"
+ },
+ {
+  "name": "Rindersteak, gegart",
+  "cat": "Fleisch, Wurst & Fisch",
+  "portions": [
+   {
+    "l": "1 Steak",
+    "g": 180
+   }
+  ],
+  "bls": "Y134022"
+ },
+ {
+  "name": "Schweineschnitzel (natur), gebraten",
+  "cat": "Fleisch, Wurst & Fisch",
+  "portions": [
+   {
+    "l": "1 Schnitzel",
+    "g": 150
+   }
+  ],
+  "bls": "Y332212"
+ },
+ {
+  "name": "Schweinebraten",
+  "cat": "Fleisch, Wurst & Fisch",
+  "portions": [
+   {
+    "l": "1 Scheibe",
+    "g": 100
+   }
+  ],
+  "bls": "Y352212"
+ },
+ {
+  "name": "Kochschinken",
+  "cat": "Fleisch, Wurst & Fisch",
+  "portions": [
+   {
+    "l": "1 Scheibe",
+    "g": 20
+   }
+  ],
+  "bls": "W424000"
+ },
+ {
+  "name": "Salami",
+  "cat": "Fleisch, Wurst & Fisch",
+  "portions": [
+   {
+    "l": "1 Scheibe",
+    "g": 10
+   }
+  ],
+  "bls": "W140000"
+ },
+ {
+  "name": "Leberwurst",
+  "cat": "Fleisch, Wurst & Fisch",
+  "portions": [
+   {
+    "l": "1 Portion (Brot)",
+    "g": 20
+   }
+  ],
+  "bls": "W323000"
+ },
+ {
+  "name": "Bratwurst, gebraten",
+  "cat": "Fleisch, Wurst & Fisch",
+  "portions": [
+   {
+    "l": "1 Bratwurst",
+    "g": 100
+   }
+  ],
+  "bls": "Y021312"
+ },
+ {
+  "name": "Wiener Würstchen",
+  "cat": "Fleisch, Wurst & Fisch",
+  "portions": [
+   {
+    "l": "1 Paar",
+    "g": 100
+   }
+  ],
+  "bls": "W211200"
+ },
+ {
+  "name": "Lachs, gegart",
+  "cat": "Fleisch, Wurst & Fisch",
+  "portions": [
+   {
+    "l": "1 Filet",
+    "g": 125
+   }
+  ],
+  "bls": "T410052"
+ },
+ {
+  "name": "Räucherlachs",
+  "cat": "Fleisch, Wurst & Fisch",
+  "portions": [
+   {
+    "l": "1 Scheibe",
+    "g": 20
+   }
+  ],
+  "bls": "T410600"
+ },
+ {
+  "name": "Thunfisch (Dose, im eigenen Saft)",
+  "cat": "Fleisch, Wurst & Fisch",
+  "portions": [
+   {
+    "l": "1 Dose (abgetropft)",
+    "g": 120
+   }
+  ],
+  "bls": "T121902"
+ },
+ {
+  "name": "Seelachs / Kabeljau, gegart",
+  "cat": "Fleisch, Wurst & Fisch",
+  "portions": [
+   {
+    "l": "1 Filet",
+    "g": 150
+   }
+  ],
+  "bls": "T207152"
+ },
+ {
+  "name": "Matjes / Hering",
+  "cat": "Fleisch, Wurst & Fisch",
+  "portions": [
+   {
+    "l": "1 Filet",
+    "g": 50
+   }
+  ],
+  "bls": "T103100"
+ },
+ {
+  "name": "Fischstäbchen",
+  "cat": "Fleisch, Wurst & Fisch",
+  "portions": [
+   {
+    "l": "1 Stück",
+    "g": 30
+   }
+  ],
+  "bls": "Y695112"
+ },
+ {
+  "name": "Garnelen, gegart",
+  "cat": "Fleisch, Wurst & Fisch",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 100
+   }
+  ],
+  "bls": "T753132"
+ },
+ {
+  "name": "Rapsöl",
+  "cat": "Fette, Öle & Nüsse",
+  "portions": [
+   {
+    "l": "1 EL",
+    "g": 10
+   },
+   {
+    "l": "1 TL",
+    "g": 4
+   }
+  ],
+  "bls": "Q180000"
+ },
+ {
+  "name": "Olivenöl",
+  "cat": "Fette, Öle & Nüsse",
+  "portions": [
+   {
+    "l": "1 EL",
+    "g": 10
+   },
+   {
+    "l": "1 TL",
+    "g": 4
+   }
+  ],
+  "bls": "Q120000"
+ },
+ {
+  "name": "Margarine",
+  "cat": "Fette, Öle & Nüsse",
+  "portions": [
+   {
+    "l": "1 Portion (Brot)",
+    "g": 10
+   }
+  ],
+  "bls": "Q400000"
+ },
+ {
+  "name": "Walnüsse",
+  "cat": "Fette, Öle & Nüsse",
+  "portions": [
+   {
+    "l": "1 Handvoll",
+    "g": 25
+   }
+  ],
+  "bls": "H120100"
+ },
+ {
+  "name": "Mandeln",
+  "cat": "Fette, Öle & Nüsse",
+  "portions": [
+   {
+    "l": "1 Handvoll",
+    "g": 25
+   }
+  ],
+  "bls": "H210100"
+ },
+ {
+  "name": "Haselnüsse",
+  "cat": "Fette, Öle & Nüsse",
+  "portions": [
+   {
+    "l": "1 Handvoll",
+    "g": 25
+   }
+  ],
+  "bls": "H130100"
+ },
+ {
+  "name": "Erdnüsse, geröstet",
+  "cat": "Fette, Öle & Nüsse",
+  "portions": [
+   {
+    "l": "1 Handvoll",
+    "g": 25
+   }
+  ],
+  "bls": "H110600"
+ },
+ {
+  "name": "Cashewkerne",
+  "cat": "Fette, Öle & Nüsse",
+  "portions": [
+   {
+    "l": "1 Handvoll",
+    "g": 25
+   }
+  ],
+  "bls": "H170100"
+ },
+ {
+  "name": "Sonnenblumenkerne",
+  "cat": "Fette, Öle & Nüsse",
+  "portions": [
+   {
+    "l": "1 EL",
+    "g": 10
+   }
+  ],
+  "bls": "H430100"
+ },
+ {
+  "name": "Leinsamen",
+  "cat": "Fette, Öle & Nüsse",
+  "portions": [
+   {
+    "l": "1 EL",
+    "g": 10
+   }
+  ],
+  "bls": "H410100"
+ },
+ {
+  "name": "Erdnussbutter",
+  "cat": "Fette, Öle & Nüsse",
+  "portions": [
+   {
+    "l": "1 EL",
+    "g": 15
+   }
+  ],
+  "bls": "H880200"
+ },
+ {
+  "name": "Zucker",
+  "cat": "Süßes & Snacks",
+  "portions": [
+   {
+    "l": "1 TL",
+    "g": 5
+   },
+   {
+    "l": "1 Stück Würfelzucker",
+    "g": 3
+   }
+  ],
+  "bls": "S111000"
+ },
+ {
+  "name": "Honig",
+  "cat": "Süßes & Snacks",
+  "portions": [
+   {
+    "l": "1 TL",
+    "g": 8
+   }
+  ],
+  "bls": "S120000"
+ },
+ {
+  "name": "Konfitüre / Marmelade",
+  "cat": "Süßes & Snacks",
+  "portions": [
+   {
+    "l": "1 Portion (Brot)",
+    "g": 20
+   }
+  ],
+  "bls": "S132000"
+ },
+ {
+  "name": "Nuss-Nougat-Creme",
+  "cat": "Süßes & Snacks",
+  "portions": [
+   {
+    "l": "1 Portion (Brot)",
+    "g": 15
+   }
+  ],
+  "bls": "S145000"
+ },
+ {
+  "name": "Vollmilchschokolade",
+  "cat": "Süßes & Snacks",
+  "portions": [
+   {
+    "l": "1 Reihe",
+    "g": 20
+   }
+  ],
+  "bls": "S539900"
+ },
+ {
+  "name": "Zartbitterschokolade 70 %",
+  "cat": "Süßes & Snacks",
+  "portions": [
+   {
+    "l": "1 Reihe",
+    "g": 20
+   }
+  ],
+  "bls": "S570000"
+ },
+ {
+  "name": "Butterkekse",
+  "cat": "Süßes & Snacks",
+  "portions": [
+   {
+    "l": "1 Keks",
+    "g": 8
+   }
+  ],
+  "bls": "D630400"
+ },
+ {
+  "name": "Rührkuchen / Marmorkuchen",
+  "cat": "Süßes & Snacks",
+  "portions": [
+   {
+    "l": "1 Stück",
+    "g": 70
+   }
+  ],
+  "bls": "D431100"
+ },
+ {
+  "name": "Obstkuchen / Apfelkuchen",
+  "cat": "Süßes & Snacks",
+  "portions": [
+   {
+    "l": "1 Stück",
+    "g": 120
+   }
+  ],
+  "bls": "D131200"
+ },
+ {
+  "name": "Sahnetorte (Obst/Erdbeer)",
+  "cat": "Süßes & Snacks",
+  "portions": [
+   {
+    "l": "1 Stück",
+    "g": 120
+   }
+  ],
+  "bls": "D313300"
+ },
+ {
+  "name": "Speiseeis (Vanille)",
+  "cat": "Süßes & Snacks",
+  "portions": [
+   {
+    "l": "1 Kugel",
+    "g": 50
+   }
+  ],
+  "bls": "S241000"
+ },
+ {
+  "name": "Gummibärchen",
+  "cat": "Süßes & Snacks",
+  "portions": [
+   {
+    "l": "1 Handvoll",
+    "g": 25
+   }
+  ],
+  "bls": "S361000"
+ },
+ {
+  "name": "Kartoffelchips",
+  "cat": "Süßes & Snacks",
+  "portions": [
+   {
+    "l": "1 Handvoll",
+    "g": 25
+   }
+  ],
+  "bls": "K280100"
+ },
+ {
+  "name": "Salzstangen",
+  "cat": "Süßes & Snacks",
+  "portions": [
+   {
+    "l": "1 Handvoll",
+    "g": 25
+   }
+  ],
+  "bls": "D064000"
+ },
+ {
+  "name": "Wasser / Mineralwasser",
+  "cat": "Getränke",
+  "portions": [
+   {
+    "l": "1 Glas",
+    "g": 200
+   },
+   {
+    "l": "1 Flasche",
+    "g": 500
+   }
+  ],
+  "bls": "N110000"
+ },
+ {
+  "name": "Kaffee, schwarz",
+  "cat": "Getränke",
+  "portions": [
+   {
+    "l": "1 Tasse",
+    "g": 200
+   }
+  ],
+  "bls": "N410100"
+ },
+ {
+  "name": "Tee (Schwarz-/Kräutertee)",
+  "cat": "Getränke",
+  "portions": [
+   {
+    "l": "1 Tasse",
+    "g": 250
+   }
+  ],
+  "bls": "N630000"
+ },
+ {
+  "name": "Orangensaft",
+  "cat": "Getränke",
+  "portions": [
+   {
+    "l": "1 Glas",
+    "g": 200
+   }
+  ],
+  "bls": "F603600"
+ },
+ {
+  "name": "Apfelsaft",
+  "cat": "Getränke",
+  "portions": [
+   {
+    "l": "1 Glas",
+    "g": 200
+   }
+  ],
+  "bls": "F110600"
+ },
+ {
+  "name": "Apfelschorle",
+  "cat": "Getränke",
+  "portions": [
+   {
+    "l": "1 Glas",
+    "g": 200
+   }
+  ],
+  "bls": "N256000"
+ },
+ {
+  "name": "Cola",
+  "cat": "Getränke",
+  "portions": [
+   {
+    "l": "1 Glas",
+    "g": 200
+   }
+  ],
+  "bls": "N330000"
+ },
+ {
+  "name": "Cola zuckerfrei",
+  "cat": "Getränke",
+  "portions": [
+   {
+    "l": "1 Glas",
+    "g": 200
+   }
+  ],
+  "bls": "N331000"
+ },
+ {
+  "name": "Kakao (mit Milch)",
+  "cat": "Getränke",
+  "portions": [
+   {
+    "l": "1 Tasse",
+    "g": 250
+   }
+  ],
+  "bls": "MIX:M111300*0.9+S723000*0.1"
+ },
+ {
+  "name": "Bier (Pils)",
+  "cat": "Getränke",
+  "portions": [
+   {
+    "l": "1 Flasche 0,33 l",
+    "g": 330
+   },
+   {
+    "l": "1 Flasche 0,5 l",
+    "g": 500
+   }
+  ],
+  "bls": "P163000"
+ },
+ {
+  "name": "Rotwein",
+  "cat": "Getränke",
+  "portions": [
+   {
+    "l": "1 Glas",
+    "g": 150
+   }
+  ],
+  "bls": "P2A3000"
+ },
+ {
+  "name": "Weißwein",
+  "cat": "Getränke",
+  "portions": [
+   {
+    "l": "1 Glas",
+    "g": 150
+   }
+  ],
+  "bls": "P210000"
+ },
+ {
+  "name": "Spaghetti Bolognese",
+  "cat": "Gerichte",
+  "portions": [
+   {
+    "l": "1 Teller",
+    "g": 400
+   }
+  ],
+  "bls": "X740433"
+ },
+ {
+  "name": "Lasagne",
+  "cat": "Gerichte",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 350
+   }
+  ],
+  "bls": "X730033"
+ },
+ {
+  "name": "Schnitzel, paniert",
+  "cat": "Gerichte",
+  "portions": [
+   {
+    "l": "1 Schnitzel",
+    "g": 150
+   }
+  ],
+  "bls": "Y332132"
+ },
+ {
+  "name": "Frikadelle / Bulette",
+  "cat": "Gerichte",
+  "portions": [
+   {
+    "l": "1 Frikadelle",
+    "g": 100
+   }
+  ],
+  "bls": "Y036122"
+ },
+ {
+  "name": "Rindergulasch",
+  "cat": "Gerichte",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 250
+   }
+  ],
+  "bls": "Y1A1000"
+ },
+ {
+  "name": "Kartoffelsalat mit Mayonnaise",
+  "cat": "Gerichte",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 200
+   }
+  ],
+  "bls": "X1A2020"
+ },
+ {
+  "name": "Kartoffelsalat mit Brühe-Essig-Marinade",
+  "cat": "Gerichte",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 200
+   }
+  ],
+  "bls": "X1A2010"
+ },
+ {
+  "name": "Pizza Margherita",
+  "cat": "Gerichte",
+  "portions": [
+   {
+    "l": "1 Pizza",
+    "g": 350
+   },
+   {
+    "l": "1 Stück (1/8)",
+    "g": 45
+   }
+  ],
+  "bls": "X912033"
+ },
+ {
+  "name": "Pizza Salami",
+  "cat": "Gerichte",
+  "portions": [
+   {
+    "l": "1 Pizza",
+    "g": 380
+   },
+   {
+    "l": "1 Stück (1/8)",
+    "g": 48
+   }
+  ],
+  "bls": "X914133"
+ },
+ {
+  "name": "Linseneintopf",
+  "cat": "Gerichte",
+  "portions": [
+   {
+    "l": "1 Teller",
+    "g": 350
+   }
+  ],
+  "bls": "X461813"
+ },
+ {
+  "name": "Gemüsesuppe",
+  "cat": "Gerichte",
+  "portions": [
+   {
+    "l": "1 Teller",
+    "g": 300
+   }
+  ],
+  "bls": "X416713"
+ },
+ {
+  "name": "Hühnersuppe mit Fleisch und Gemüse",
+  "cat": "Gerichte",
+  "portions": [
+   {
+    "l": "1 Teller",
+    "g": 300
+   }
+  ],
+  "bls": "X4A1020"
+ },
+ {
+  "name": "Rührei",
+  "cat": "Gerichte",
+  "portions": [
+   {
+    "l": "1 Portion (2 Eier)",
+    "g": 130
+   }
+  ],
+  "bls": "Y720143"
+ },
+ {
+  "name": "Spiegelei",
+  "cat": "Gerichte",
+  "portions": [
+   {
+    "l": "1 Spiegelei",
+    "g": 50
+   }
+  ],
+  "bls": "Y710142"
+ },
+ {
+  "name": "Pfannkuchen",
+  "cat": "Gerichte",
+  "portions": [
+   {
+    "l": "1 Pfannkuchen",
+    "g": 100
+   }
+  ],
+  "bls": "X929212"
+ },
+ {
+  "name": "Käsespätzle",
+  "cat": "Gerichte",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 300
+   }
+  ],
+  "bls": "X711412"
+ },
+ {
+  "name": "Milchreis",
+  "cat": "Gerichte",
+  "portions": [
+   {
+    "l": "1 Portion",
+    "g": 250
+   }
+  ],
+  "bls": "X810033"
+ },
+ {
+  "name": "Gemischter Salat mit Essig-Öl-Marinade",
+  "cat": "Gerichte",
+  "portions": [
+   {
+    "l": "1 Schüssel",
+    "g": 150
+   }
+  ],
+  "bls": "X201400"
+ }
+]

@@ -270,14 +270,22 @@ function fmt(v,unit){
 }
 const fmtN = (v,k)=>fmt(v,NBY[k].u)+' '+NBY[k].u;
 const fold = s=>String(s).toLowerCase().replace(/ä/g,'a').replace(/ö/g,'o').replace(/ü/g,'u').replace(/ß/g,'ss');
-const ALIAS = {semmel:'brotchen',schrippe:'brotchen',weckle:'brotchen',paradeiser:'tomate',erdapfel:'kartoffel',topfen:'quark',rahm:'sahne',karotte:'karotte',mohre:'mohre',huhn:'hahnchen',hendl:'hahnchen',pute:'pute',krabben:'garnelen',grutze:'',obatzter:''};
+// Andere Namen für dasselbe (Suchwort -> zusätzliche Alternative)
+const ALIAS = {semmel:'brotchen',schrippe:'brotchen',weckle:'brotchen',wecken:'brotchen',paradeiser:'tomate',erdapfel:'kartoffel',topfen:'quark',
+  huhn:'hahnchen',hendl:'hahnchen',hahnchen:'huhn',haehnchen:'hahnchen',krabben:'garnele',garnelen:'garnele',brokkoli:'broccoli',
+  pfannkuchen:'eierkuchen',eierkuchen:'pfannkuchen',kloss:'knodel',klosse:'knodel',knodel:'kloss',moehre:'mohre',rotkraut:'rotkohl',blaukraut:'rotkohl',
+  weisskraut:'weisskohl',porree:'lauch',lauch:'porree',fleischpflanzerl:'frikadelle',bulette:'frikadelle',fleischkuchle:'frikadelle',
+  kassler:'kasseler',kasseler:'kassler',sosse:'sauce',sose:'sauce',bratensosse:'bratensauce',joghurt:'jogurt',spaetzle:'spatzle'};
 function defaultMeal(){ const h = new Date().getHours(); return h<10?'fr':h<14?'mi':h<17?'sn':'ab'; }
 
 /* ---------- Lebensmittel ---------- */
 function arrToN(a){ const o={}; KEYS.forEach((k,i)=>o[k]=a[i]); return o; }
 function parsePortions(s){ return (s||'').split(';').filter(Boolean).map(p=>{const i=p.lastIndexOf('='); return {l:p.slice(0,i),g:+p.slice(i+1)};}); }
-let BASE = null;
-function baseFoods(){ if(!BASE) BASE = window.BASE_FOODS.map((r,i)=>({key:'b:'+i,name:r[0],cat:r[1],n:arrToN(r[2]),portions:parsePortions(r[3]),src:'base'})); return BASE; }
+// Alltags-Lebensmittel (mit Portionsgrößen, Schlüssel b:Position) und alle weiteren BLS-Lebensmittel (Schlüssel L:BLS-Code)
+let BASE = null, BLS = null, FOODMAP = null;
+function baseFoods(){ if(!BASE) BASE = window.BASE_FOODS.map((r,i)=>({key:'b:'+i,name:r[0],cat:r[1],n:arrToN(r[2]),portions:parsePortions(r[3]),src:'base',bls:r[4],fk:fold(r[0])})); return BASE; }
+function blsFoods(){ if(!BLS) BLS = (window.BLS_FOODS||[]).map(r=>({key:'L:'+r[0],name:r[1],cat:(window.BLS_GROUPS||{})[r[0][0]]||'Lebensmittel',n:arrToN(r[2]),portions:[],src:'bls',bls:r[0],fk:fold(r[1])})); return BLS; }
+function foodMap(){ if(!FOODMAP){ FOODMAP = new Map(); baseFoods().forEach(f=>FOODMAP.set(f.key,f)); blsFoods().forEach(f=>FOODMAP.set(f.key,f)); } return FOODMAP; }
 function recipeFood(r){
   const w = r.weight>0 ? r.weight : r.items.reduce((a,it)=>a+it.g,0);
   const n = {};
@@ -290,22 +298,41 @@ function allFoods(){
     ...S.custom.map(c=>({key:'c:'+c.id,name:c.name,cat:'Eigene Lebensmittel',n:c.n,portions:c.portions||[],src:'custom'})),
     ...S.recipes.map(recipeFood),
     ...S.saved.map(p=>({key:'o:'+p.code,name:p.name,brand:p.brand,cat:'Gespeicherte Produkte',n:p.n,portions:p.portions||[],src:'off'})),
-    ...baseFoods()
+    ...baseFoods(),
+    ...blsFoods()
   ];
 }
-function findFood(key){ return allFoods().find(f=>f.key===key) || null; }
-function searchFoods(q){
-  const words = fold(q).split(/\s+/).filter(Boolean).map(w=>ALIAS[w]||w).filter(Boolean);
-  if(!words.length) return [];
-  return allFoods().map(f=>{
-    const n = fold(f.name+' '+(f.brand||''));
-    if(!words.every(w=>n.includes(w))) return null;
-    let s = n.startsWith(words[0]) ? 0 : (n.includes(' '+words[0])||n.includes('('+words[0]) ? 1 : 2);
-    if(f.src!=='base') s -= .5;
-    return {f,s};
-  }).filter(Boolean).sort((a,b)=>a.s-b.s||a.f.name.localeCompare(b.f.name,'de')).map(x=>x.f).slice(0,60);
+function findFood(key){
+  if(/^[bL]:/.test(key)) return foodMap().get(key) || null;
+  return allFoods().find(f=>f.key===key) || null;
 }
-const SRC_LABEL = {base:'Richtwert aus der Grunddatenbank',custom:'Eigenes Lebensmittel',recipe:'Eigene Speise',off:'Open Food Facts (Herstellerangaben)'};
+function searchFoods(q){
+  // jedes Suchwort muss vorkommen; Alias-Wörter (z. B. Semmel = Brötchen) zählen als Alternative
+  const words = fold(q).split(/[\s,]+/).filter(Boolean).map(w=>{
+    const alts=[w]; if(ALIAS[w]) alts.push(ALIAS[w]);
+    if(w.length>=6) [/n$/,/en$/,/e$/,/s$/].forEach(rx=>{ const st=w.replace(rx,''); if(st!==w && !alts.includes(st)) alts.push(st); }); // Rouladen -> Roulade
+    return alts; });
+  if(!words.length) return [];
+  const first = words[0], SRC_RANK = {custom:-.5,recipe:-.5,off:-.4,base:0,bls:.3};
+  const esc = w=>w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  // Treffer am Wortanfang oder am Ende eines zusammengesetzten Wortes (Rinder|roulade) zählen als gut
+  const goodRx = new RegExp('(^|[\\s(/\\-,])('+first.map(esc).join('|')+')|('+first.map(esc).join('|')+')(e|n|en|s|es)?(?![a-z])');
+  const out = [];
+  for(const f of allFoods()){
+    const n = f.fk || fold(f.name+' '+(f.brand||''));
+    if(!words.every(alts=>alts.some(w=>n.includes(w)))) continue;
+    let s = first.some(w=>n.startsWith(w)) ? 0 : goodRx.test(n) ? 1 : 2;
+    s += SRC_RANK[f.src]||0;
+    if(f.src==='bls'){ // rohes Fleisch/Fisch und Tiefkühlware nach hinten, fertige Gerichte bevorzugen
+      if(/[UVT]/.test(f.bls[0]) && /(^|[\s,])roh($|[\s,])/.test(n)) s += .4;
+      if(n.includes('tiefgefroren')) s += .2;
+    }
+    out.push({f, s});
+  }
+  return out.sort((a,b)=>a.s-b.s||a.f.name.length-b.f.name.length||a.f.name.localeCompare(b.f.name,'de')).slice(0,80).map(x=>x.f);
+}
+const BLS_LABEL = 'Bundeslebensmittelschlüssel (BLS 4.0)';
+const SRC_LABEL = {base:BLS_LABEL,bls:BLS_LABEL,custom:'Eigenes Lebensmittel',recipe:'Eigene Speise',off:'Open Food Facts (Herstellerangaben)'};
 function totals(entries){
   const t={}, miss={}; KEYS.forEach(k=>{t[k]=0;miss[k]=0;});
   entries.forEach(e=>KEYS.forEach(k=>{ const v=e.n[k]; if(v==null) miss[k]++; else t[k]+=v*e.g/100; }));
@@ -453,7 +480,7 @@ function renderToday(){
   $('#pickD').onchange=e=>{ if(e.target.value){ curDate=e.target.value; renderToday(); } };
   if($('#toToday')) $('#toToday').onclick=()=>{curDate=today();renderToday();};
   $$('[data-add]').forEach(b=>b.onclick=()=>openPicker({meal:b.dataset.add,date:curDate}));
-  $$('[data-entry]').forEach(b=>b.onclick=()=>{ const e=S.entries.find(x=>x.id===b.dataset.entry); if(e) openSheet(body=>amountSheet(body,{food:{key:e.key,name:e.name,n:e.n,portions:(findFood(e.key)||{}).portions||[],src:({b:'base',c:'custom',r:'recipe',o:'off'})[String(e.key||'b:').split(':')[0]]||'base'},entry:e,mode:'diary'})); });
+  $$('[data-entry]').forEach(b=>b.onclick=()=>{ const e=S.entries.find(x=>x.id===b.dataset.entry); if(e) openSheet(body=>amountSheet(body,{food:{key:e.key,name:e.name,n:e.n,portions:(findFood(e.key)||{}).portions||[],src:({b:'base',L:'bls',c:'custom',r:'recipe',o:'off'})[String(e.key||'b:').split(':')[0]]||'base'},entry:e,mode:'diary'})); });
   $$('[data-copy]').forEach(b=>b.onclick=()=>{ const m=b.dataset.copy; S.entries.filter(e=>e.d===yest&&e.m===m).forEach(e=>S.entries.push(Object.assign({},e,{id:uid(),d:curDate,ex:undefined}))); save(); toast('Von gestern übernommen'); renderToday(); });
   if($('#demo')) $('#demo').onclick=loadDemo;
   if($('#hideWelcome')) $('#hideWelcome').onclick=()=>{S.welcomed=true;save();renderToday();};
@@ -468,7 +495,7 @@ function foodItem(f){
 }
 function openPicker(opt){
   // opt: {meal,date} für Tagebuch | {mode:'ingredient', onPick} | {mode:'compare', onPick}
-  let q = '', offRes = null, offState = '', cat = null, offTimer = null;
+  let q = '', offRes = null, offState = '', cat = null, offTimer = null, drawTimer = null;
   const mode = opt.mode||'diary';
   const pick = f=>{
     clearTimeout(offTimer);
@@ -522,8 +549,11 @@ function openPicker(opt){
       draw();
     };
     $('#pq',body).addEventListener('input',e=>{
-      q=e.target.value; offRes=OFF_CACHE[q.trim()]||null; offState=''; cat=null; clearTimeout(offTimer); draw();
-      if(!offRes && q.trim().length>=3 && navigator.onLine!==false && searchFoods(q).length<5) offTimer=setTimeout(runOff,900);
+      q=e.target.value; offRes=OFF_CACHE[q.trim()]||null; offState=''; cat=null; clearTimeout(offTimer); clearTimeout(drawTimer);
+      // kurz warten, damit beim schnellen Tippen nicht jede Taste die ganze Liste durchsucht
+      drawTimer=setTimeout(()=>{ draw();
+        if(!offRes && q.trim().length>=3 && navigator.onLine!==false && searchFoods(q).length<5) offTimer=setTimeout(runOff,800);
+      },120);
     });
     draw();
     const title = mode==='diary' ? (MEALS.find(m=>m.id===opt.meal)||{}).l+' hinzufügen' : mode==='ingredient' ? 'Zutat hinzufügen' : 'Zum Vergleich hinzufügen';
@@ -547,7 +577,7 @@ function amountSheet(body,o){
     '<details><summary>Alle Nährstoffe für diese Menge</summary><div id="pall"></div></details>'+
     '<button class="btn" id="ok">'+(editing?'Speichern':o.mode==='ingredient'?'Zur Speise hinzufügen':'Hinzufügen')+'</button>'+
     (editing?'<button class="btn danger" id="del">Eintrag löschen</button>':'')+
-    (f.src==='base'?'<div class="small muted">Richtwerte – je nach Sorte und Zubereitung können die echten Werte abweichen.</div>':'')+'</div>';
+    (f.src==='base'||f.src==='bls'?'<div class="small muted">Durchschnittswerte aus dem Bundeslebensmittelschlüssel. Je nach Sorte, Rezept und Zubereitung können die echten Werte etwas abweichen.</div>':'')+'</div>';
   const gr = $('#gr',body);
   const upd = ()=>{
     gr.value = Math.round(grams*10)/10;
@@ -890,11 +920,11 @@ function infoSheet(body){
   body.innerHTML = '<div class="stack" style="max-width:62ch">'+
     '<p><b>Tagesteller</b> ist ein persönliches Ernährungstagebuch. Es läuft komplett auf diesem Gerät, braucht kein Konto und schickt keine Daten weg. Nur die Online-Suche und die Barcode-Suche fragen bei Open Food Facts an.</p>'+
     '<h2>Woher kommen die Werte?</h2>'+
-    '<p>Die Grunddatenbank enthält '+window.BASE_FOODS.length+' gängige Lebensmittel und Gerichte mit Richtwerten je 100 g, angelehnt an übliche Nährwerttabellen. Echte Werte schwanken je nach Sorte, Rezept und Zubereitung. Für verpackte Produkte sind die Herstellerangaben aus der Online-Suche oder von der Packung genauer.</p>'+
+    '<p>Die eingebaute Datenbank enthält '+(window.BASE_FOODS.length+(window.BLS_FOODS||[]).length).toLocaleString('de-DE')+' Lebensmittel und Gerichte aus dem <b>Bundeslebensmittelschlüssel (BLS 4.0)</b>, der deutschen Nährstoffdatenbank des Max Rubner-Instituts. '+window.BASE_FOODS.length+' Alltags-Lebensmittel haben zusätzlich Portionsgrößen. Die Werte sind Durchschnittswerte je 100 g und schwanken je nach Sorte, Rezept und Zubereitung. Für verpackte Produkte sind die Herstellerangaben aus der Online-Suche oder von der Packung genauer.</p>'+
     '<p>Bei Produkten aus Open Food Facts fehlen oft Vitamine und Mineralstoffe. Die Tagessumme ist dann als „unvollständig“ markiert.</p>'+
     '<h2>Tagesziele</h2><p>Die Ziele sind die Referenzwerte der Deutschen Gesellschaft für Ernährung (DGE) für Frauen ab 65 Jahren. Vitamin D lässt sich über das Essen allein kaum erreichen, der Körper bildet es vor allem mit Sonnenlicht.</p>'+
     '<div class="note">Die App ersetzt keine ärztliche oder ernährungsmedizinische Beratung. Bei Erkrankungen oder einer verordneten Diät gelten die Vorgaben von Arzt oder Ernährungsberatung.</div>'+
-    '<p class="small muted">Produktdaten: Open Food Facts (openfoodfacts.org), Lizenz ODbL.</p></div>';
+    '<p class="small muted">Nährwerte: Max Rubner-Institut (2025): Bundeslebensmittelschlüssel (BLS), Version 4.0, Deutsche Nährstoffdatenbank. Karlsruhe. DOI: 10.25826/Data20251217-134202-0<br>Produktdaten: Open Food Facts (openfoodfacts.org), Lizenz ODbL.</p></div>';
   return {title:'Über diese App'};
 }
 

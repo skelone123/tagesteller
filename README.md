@@ -6,7 +6,8 @@ Ernährungstagebuch für iPhone und iPad: Lebensmittel und Speisen eintragen, N�
 
 ```
 index.html      die App
-foods.js        Grunddatenbank (ca. 170 Lebensmittel und Gerichte, Richtwerte je 100 g)
+foods.js        Lebensmittel-Datenbank (7.140 Einträge aus dem BLS 4.0, je 100 g)
+tools/          Skript, das foods.js aus der BLS-Excel-Datei erzeugt
 manifest.json   App-Name und Icon für den Home-Bildschirm
 sw.js           Offline-Speicher (App funktioniert auch ohne Internet)
 icons/          App-Icons
@@ -40,12 +41,15 @@ iPhone und iPad haben jeweils ein eigenes Tagebuch. Übertragen geht über **Meh
 ## Updates
 
 Neue Version einfach wieder in das GitHub-Repository hochladen (Dateien ersetzen) und in `sw.js` die
-Versionsnummer in `CACHE = 'tagesteller-v1'` hochzählen. Die Apps holen sich das Update beim nächsten
+Versionsnummer in `CACHE = 'tagesteller-vX'` hochzählen. Die Apps holen sich das Update beim nächsten
 Öffnen mit Internetverbindung. Die Daten deiner Eltern bleiben dabei erhalten.
 
 ## Datenquellen
 
-- Grunddatenbank: Richtwerte angelehnt an übliche Nährwerttabellen (BLS, USDA). Echte Werte schwanken.
+- Nährwerte: Max Rubner-Institut (2025): Bundeslebensmittelschlüssel (BLS), Version 4.0,
+  Deutsche Nährstoffdatenbank. Karlsruhe. DOI: 10.25826/Data20251217-134202-0
+  Die Datenbank neu erzeugen: `python3 tools/build_foods.py BLS_4_0_Daten_2025_DE.xlsx`
+  (Alltagsnamen und Portionsgrößen stehen in `tools/curated.json`).
 - Online-Suche und Barcode: Open Food Facts (openfoodfacts.org, ODbL), Herstellerangaben.
 - Tagesziele: Referenzwerte der DGE für Frauen ab 65 Jahren, in der App änderbar.
 
