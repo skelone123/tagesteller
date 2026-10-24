@@ -113,8 +113,11 @@ h2{font-size:1.15rem}
 /* Tab-Leiste */
 .tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);
   padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
-.tabs-in{max-width:720px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
-.tab{display:flex;flex-direction:column;align-items:center;gap:2px;border:0;background:none;padding:6px 2px;border-radius:12px;color:var(--muted);font-size:.8rem;min-height:52px}
+.tabs-in{max-width:720px;margin:0 auto;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px}
+.tab{display:flex;flex-direction:column;align-items:center;gap:2px;border:0;background:none;padding:6px 0;border-radius:12px;color:var(--muted);font-size:.74rem;min-height:52px;min-width:0}
+.tab span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:380px){.tab{font-size:.66rem}}
+input[type=date]{padding-inline:10px;min-width:0}
 .tab svg{width:26px;height:26px}
 .tab[aria-current="page"]{color:var(--accent);font-weight:700;background:var(--accent-soft)}
 
@@ -212,10 +215,11 @@ const NBY = Object.fromEntries(NUTR.map(n=>[n.k,n]));
 const DGE_W65 = {kcal:1700,prot:57,fat:57,sfa:19,carb:210,sugar:50,fib:30,salt:6,ca:1000,mg:300,fe:14,zn:8,k:4000,vitA:700,vitC:95,vitD:20,vitE:8,b12:4,fol:300};
 const MEALS = [{id:'fr',l:'Frühstück'},{id:'mi',l:'Mittagessen'},{id:'ab',l:'Abendessen'},{id:'sn',l:'Zwischendurch'}];
 const STORE = 'tagesteller-v1';
-const OFF_FIELDS = 'code,product_name,product_name_de,brands,nutriments,serving_quantity,quantity';
+const OFF_CACHE = {};
+const OFF_FIELDS ='code,product_name,product_name_de,brands,nutriments,serving_quantity,quantity';
 
 /* ---------- Speicher ---------- */
-function blank(){ return {v:1,entries:[],custom:[],recipes:[],saved:[],fav:[],recent:[],targets:Object.assign({},DGE_W65),welcomed:false}; }
+function blank(){ return {v:1,entries:[],custom:[],recipes:[],saved:[],fav:[],recent:[],weights:[],goalKg:null,targets:Object.assign({},DGE_W65),welcomed:false}; }
 function load(){
   try{ const r = localStorage.getItem(STORE); if(r){ const o = JSON.parse(r); const b = blank(); Object.assign(b,o); b.targets = Object.assign({},DGE_W65,o.targets||{}); return b; } }catch(e){}
   return blank();
@@ -331,6 +335,7 @@ const I = {
   chart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20h16"/><path d="M7 16v-5M12 16V6M17 16v-8"/></svg>',
   cmp:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M5 20h14"/><path d="M5 7h14"/><path d="M5 7l-3 6a3 3 0 0 0 6 0zM19 7l-3 6a3 3 0 0 0 6 0z"/></svg>',
   more:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>',
+  scale:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M7.5 11a5.5 5.5 0 0 1 9 0"/><path d="M12 11l2-3"/></svg>',
   plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
   minus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14"/></svg>',
   left:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
@@ -373,12 +378,12 @@ function drawSheet(){
 
 /* ---------- Haupt-Navigation ---------- */
 let view = 'today', curDate = today();
-const TABS = [{id:'today',l:'Heute',i:I.today},{id:'stats',l:'Auswertung',i:I.chart},{id:'cmp',l:'Vergleich',i:I.cmp},{id:'more',l:'Mehr',i:I.more}];
+const TABS = [{id:'today',l:'Heute',i:I.today},{id:'stats',l:'Auswertung',i:I.chart},{id:'weight',l:'Gewicht',i:I.scale},{id:'cmp',l:'Vergleich',i:I.cmp},{id:'more',l:'Mehr',i:I.more}];
 function drawTabs(){
   $('#tabs').innerHTML = TABS.map(t=>'<button class="tab" data-tab="'+t.id+'"'+(t.id===view?' aria-current="page"':'')+'>'+t.i+'<span>'+t.l+'</span></button>').join('');
   $$('#tabs .tab').forEach(b=>b.onclick=()=>{ view=b.dataset.tab; render(); window.scrollTo(0,0); });
 }
-function render(){ drawTabs(); ({today:renderToday,stats:renderStats,cmp:renderCompare,more:renderMore})[view](); }
+function render(){ drawTabs(); ({today:renderToday,stats:renderStats,weight:renderWeight,cmp:renderCompare,more:renderMore})[view](); }
 
 /* ---------- HEUTE ---------- */
 function nutrientRows(t,miss,keys){
@@ -409,7 +414,7 @@ function renderToday(){
       '<div class="meal-f"><button class="addbtn" data-add="'+m.id+'">'+I.plus+'Hinzufügen</button>'+(hasY?'<button class="ghost" data-copy="'+m.id+'">Wie gestern</button>':'')+'</div></section>';
   }).join('');
   const welcome = !S.welcomed && !S.entries.length ? '<div class="card stack"><h2>Willkommen beim Tagesteller</h2><div>Tippen Sie bei einer Mahlzeit auf <b>Hinzufügen</b>, suchen Sie ein Lebensmittel und wählen Sie die Menge. Die Nährwerte werden automatisch berechnet.</div><div class="row wrap"><button class="btn sec" id="demo" style="width:auto">Mit Beispieldaten ausprobieren</button><button class="textbtn" id="hideWelcome">Ausblenden</button></div></div>' : '';
-  const demoNote = S.entries.some(e=>e.ex) ? '<div class="note row spread wrap"><span>Es sind <b>Beispieldaten</b> geladen.</span><button class="textbtn" id="clearDemo">Beispieldaten löschen</button></div>' : '';
+  const demoNote = S.entries.some(e=>e.ex)||S.weights.some(w=>w.ex) ? '<div class="note row spread wrap"><span>Es sind <b>Beispieldaten</b> geladen.</span><button class="textbtn" id="clearDemo">Beispieldaten löschen</button></div>' : '';
   $('#app').innerHTML =
     '<header class="top"><div class="eyebrow">'+(isToday?'Heute':'Tagebuch')+'</div><div class="datebar">'+
     '<button class="iconbtn" id="prevD" aria-label="Vorheriger Tag">'+I.left+'</button>'+
@@ -431,7 +436,7 @@ function renderToday(){
   $$('[data-copy]').forEach(b=>b.onclick=()=>{ const m=b.dataset.copy; S.entries.filter(e=>e.d===yest&&e.m===m).forEach(e=>S.entries.push(Object.assign({},e,{id:uid(),d:curDate,ex:undefined}))); save(); toast('Von gestern übernommen'); renderToday(); });
   if($('#demo')) $('#demo').onclick=loadDemo;
   if($('#hideWelcome')) $('#hideWelcome').onclick=()=>{S.welcomed=true;save();renderToday();};
-  if($('#clearDemo')) $('#clearDemo').onclick=async()=>{ if(await ask('Alle Beispieldaten löschen? Ihre eigenen Einträge bleiben erhalten.','Beispieldaten löschen',true)){ S.entries=S.entries.filter(e=>!e.ex); save(); render(); } };
+  if($('#clearDemo')) $('#clearDemo').onclick=async()=>{ if(await ask('Alle Beispieldaten löschen? Ihre eigenen Einträge bleiben erhalten.','Beispieldaten löschen',true)){ S.entries=S.entries.filter(e=>!e.ex); S.weights=S.weights.filter(w=>!w.ex); save(); render(); } };
 }
 
 /* ---------- Auswahl (Suche) ---------- */
@@ -442,7 +447,7 @@ function foodItem(f){
 }
 function openPicker(opt){
   // opt: {meal,date} für Tagebuch | {mode:'ingredient', onPick} | {mode:'compare', onPick}
-  let q = '', offRes = null, offState = '', cat = null;
+  let q = '', offRes = null, offState = '', cat = null, offTimer = null;
   const mode = opt.mode||'diary';
   const pick = f=>{
     if(mode==='compare'){ keepOff(f); save(); opt.onPick(f); return; }
@@ -454,8 +459,9 @@ function openPicker(opt){
       let html = '';
       if(q.trim()){
         html += res.length ? '<div class="list">'+res.map(foodItem).join('')+'</div>' : '<div class="empty">Nichts in der Liste gefunden.</div>';
-        html += '<div class="stack" style="margin-top:14px"><button class="btn sec" id="offGo">„'+esc(q.trim())+'“ online suchen (Markenprodukte)</button>';
-        if(offState==='load') html += '<div class="empty">Suche bei Open Food Facts …</div>';
+        html += '<div class="stack" style="margin-top:14px">';
+        if(!offRes && offState!=='load') html += '<button class="btn sec" id="offGo">„'+esc(q.trim())+'“ online suchen (Markenprodukte)</button>';
+        if(offState==='load') html += '<div class="empty">Suche zusätzlich online bei Open Food Facts …</div>';
         if(offState==='err') html += '<div class="note">Die Online-Suche hat nicht geklappt. Bitte prüfen Sie die Internetverbindung und versuchen Sie es noch einmal.</div>';
         if(offRes){ html += offRes.length ? '<div class="small muted">Ergebnisse von Open Food Facts (Herstellerangaben):</div><div class="list">'+offRes.map(foodItem).join('')+'</div>' : '<div class="empty">Online nichts gefunden. Legen Sie das Produkt einfach selbst an.</div>'; }
         html += '</div>';
@@ -478,12 +484,24 @@ function openPicker(opt){
       $$('[data-food]',body).forEach(b=>b.onclick=()=>{ const k=b.dataset.food; const f = (offRes||[]).find(x=>x.key===k) || findFood(k); if(f) pick(f); });
       $$('[data-cat]',body).forEach(b=>b.onclick=()=>{cat=b.dataset.cat;draw();});
       if($('#catBack',body)) $('#catBack',body).onclick=()=>{cat=null;draw();};
-      if($('#offGo',body)) $('#offGo',body).onclick=async()=>{ offState='load'; offRes=null; draw(); try{ offRes = await offSearch(q.trim()); offState=''; }catch(e){ offState='err'; } draw(); };
+      if($('#offGo',body)) $('#offGo',body).onclick=()=>{ clearTimeout(offTimer); runOff(); };
       $('#bcGo',body).onclick=async()=>{ const code=$('#bc',body).value.replace(/\D/g,''); const msg=$('#bcMsg',body); if(code.length<8){ msg.innerHTML='<div class="note">Bitte die vollständige Nummer eingeben (meist 13 Ziffern).</div>'; return; } msg.innerHTML='<div class="empty">Suche …</div>'; try{ const f=await offBarcode(code); if(f){ msg.innerHTML=''; pick(f); } else msg.innerHTML='<div class="note">Zu dieser Nummer ist nichts bekannt. Sie können das Produkt mit den Werten von der Packung selbst anlegen.</div>'; }catch(e){ msg.innerHTML='<div class="note">Keine Verbindung. Bitte später erneut versuchen.</div>'; } };
       if($('#newOwn',body)) $('#newOwn',body).onclick=()=>openSheet(b=>customFoodSheet(b,null,f=>{ backSheet(); pick(f); }));
     };
     body.innerHTML = '<div class="search"><span aria-hidden="true">'+I.search+'</span><input type="search" id="pq" placeholder="Lebensmittel suchen, z. B. Apfel" autocomplete="off" aria-label="Lebensmittel suchen" value="'+esc(q)+'"></div><div id="pres" style="margin-top:14px"></div>';
-    $('#pq',body).addEventListener('input',e=>{ q=e.target.value; offRes=null; offState=''; cat=null; draw(); });
+    // Online-Suche: startet automatisch, wenn in der eigenen Liste wenig gefunden wird
+    const runOff = async()=>{
+      const qq=q.trim(); if(!qq) return;
+      if(OFF_CACHE[qq]){ offRes=OFF_CACHE[qq]; offState=''; draw(); return; }
+      offState='load'; offRes=null; draw();
+      try{ const r=await offSearch(qq); OFF_CACHE[qq]=r; if(q.trim()!==qq) return; offRes=r; offState=''; }
+      catch(e){ if(q.trim()!==qq) return; offState='err'; }
+      draw();
+    };
+    $('#pq',body).addEventListener('input',e=>{
+      q=e.target.value; offRes=OFF_CACHE[q.trim()]||null; offState=''; cat=null; clearTimeout(offTimer); draw();
+      if(!offRes && q.trim().length>=3 && navigator.onLine!==false && searchFoods(q).length<5) offTimer=setTimeout(runOff,900);
+    });
     draw();
     const title = mode==='diary' ? (MEALS.find(m=>m.id===opt.meal)||{}).l+' hinzufügen' : mode==='ingredient' ? 'Zutat hinzufügen' : 'Zum Vergleich hinzufügen';
     return {title, after:()=>{ setTimeout(()=>{ try{ $('#pq',body).focus(); }catch(e){} },250); }};
@@ -666,6 +684,86 @@ function renderStats(){
   $$('tr[data-n]').forEach(tr=>tr.onclick=()=>{ ST.nut=tr.dataset.n; ST.sel=null; renderStats(); window.scrollTo({top:0,behavior:'smooth'}); });
 }
 
+/* ---------- GEWICHT ---------- */
+const WST = {range:90, sel:null, all:false};
+const fmtKg = v=>Number(v).toLocaleString('de-DE',{minimumFractionDigits:1,maximumFractionDigits:1});
+const signKg = v=>(v>0.04?'+':v<-0.04?'−':'±')+fmtKg(Math.abs(v))+' kg';
+function weightsSorted(){ return S.weights.slice().sort((a,b)=>a.d.localeCompare(b.d)); }
+function parseKg(s){ const v=parseFloat(String(s).trim().replace(',','.')); return v>=20&&v<=300 ? Math.round(v*10)/10 : null; }
+function saveWeight(d,kg){ const w=S.weights.find(x=>x.d===d); if(w){ w.kg=kg; delete w.ex; } else S.weights.push({id:uid(),d,kg}); save(); return !!w; }
+const daysBetween = (a,b)=>Math.round((parseIso(b)-parseIso(a))/864e5);
+function weightChart(pts,from,to,W){
+  const H=240,L=44,R=16,T=18,B=34, goal=S.goalKg;
+  let lo=Math.min(...pts.map(p=>p.kg)), hi=Math.max(...pts.map(p=>p.kg));
+  if(goal && Math.abs(goal-lo)<8 && Math.abs(goal-hi)<8){ lo=Math.min(lo,goal); hi=Math.max(hi,goal); }
+  const sp0=hi-lo, step = sp0<=2.5?0.5:sp0<=6?1:sp0<=12?2:sp0<=30?5:10;
+  lo=Math.floor((lo-step*0.5)/step)*step; hi=Math.ceil((hi+step*0.5)/step)*step;
+  const span=Math.max(1,daysBetween(from,to));
+  const x=d=>L+(W-L-R)*daysBetween(from,d)/span, y=v=>T+(H-T-B)*(hi-v)/(hi-lo);
+  let s='<svg class="chart" viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'" role="img" aria-label="Gewichtsverlauf">';
+  for(let v=lo; v<=hi+1e-9; v+=step){ const yy=y(v); s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+yy+'" y2="'+yy+'" stroke="var(--line)" stroke-width="1"/><text x="'+(L-6)+'" y="'+(yy+4)+'" text-anchor="end" font-size="11">'+(step<1?fmtKg(v):Math.round(v))+'</text>'; }
+  const nl = W<460?3:5;
+  for(let i=0;i<nl;i++){ const d=addDays(from,Math.round(span*i/(nl-1))); const lab = span>200 ? parseIso(d).toLocaleDateString('de-DE',{month:'short',year:'2-digit'}) : parseIso(d).toLocaleDateString('de-DE',{day:'numeric',month:'short'});
+    s+='<text x="'+x(d)+'" y="'+(H-10)+'" text-anchor="'+(i===0?'start':i===nl-1?'end':'middle')+'" font-size="11">'+esc(lab)+'</text>'; }
+  if(goal && goal>=lo && goal<=hi){ const yy=y(goal); s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+yy+'" y2="'+yy+'" stroke="var(--fg)" stroke-width="1.5" stroke-dasharray="5 4"/><text x="'+(L+6)+'" y="'+(yy-6)+'" font-size="11" style="fill:var(--fg)">Ziel '+fmtKg(goal)+' kg</text>'; }
+  if(pts.length>1){ const line=pts.map(p=>x(p.d).toFixed(1)+','+y(p.kg).toFixed(1)).join(' L');
+    s+='<path d="M'+x(pts[0].d).toFixed(1)+','+(H-B)+' L'+line+' L'+x(pts[pts.length-1].d).toFixed(1)+','+(H-B)+' Z" fill="var(--accent)" fill-opacity=".12"/>'+
+       '<path d="M'+line+'" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>'; }
+  pts.forEach((p,i)=>{ const cx=x(p.d).toFixed(1), cy=y(p.kg).toFixed(1), sel=WST.sel===i, lastP=i===pts.length-1;
+    if(pts.length<=60||sel||lastP) s+='<circle cx="'+cx+'" cy="'+cy+'" r="'+(sel?6:lastP?5:3.5)+'" fill="'+(sel?'var(--fg)':'var(--accent)')+'" stroke="var(--surface)" stroke-width="2"/>';
+    s+='<circle data-w="'+i+'" cx="'+cx+'" cy="'+cy+'" r="14" fill="transparent" style="cursor:pointer"/>'; });
+  return s+'</svg>';
+}
+function renderWeight(){
+  const all=weightsSorted(), last=all[all.length-1], t=today();
+  const from = WST.range==='all' ? (all[0]?all[0].d:t) : addDays(t,-(WST.range-1));
+  const pts = all.filter(w=>w.d>=from && w.d<=t);
+  const ch = pts.length>1 ? pts[pts.length-1].kg-pts[0].kg : null;
+  const goal = S.goalKg;
+  const rangeLab = {30:'in 30 Tagen',90:'in 3 Monaten',365:'in 1 Jahr',all:'seit Beginn'}[WST.range];
+  const chips = [[30,'30 Tage'],[90,'3 Monate'],[365,'1 Jahr'],['all','Alles']].map(([v,l])=>'<button class="chip" data-wr="'+v+'" aria-pressed="'+(WST.range===v)+'">'+l+'</button>').join('');
+  const desc = all.slice().reverse(), shown = WST.all?desc:desc.slice(0,10);
+  const listHtml = shown.map(w=>{ const i=all.indexOf(w), prev=all[i-1];
+    return '<button class="item" data-wid="'+w.id+'"><div class="nm"><div>'+esc(fmtDateLong(w.d))+'</div>'+(prev?'<div class="sub num">'+signKg(w.kg-prev.kg)+' seit '+fmtDateShort(prev.d)+'</div>':'<div class="sub">erste Messung</div>')+'</div><div class="kc num" style="color:var(--fg);font-weight:700;font-size:1.05rem">'+fmtKg(w.kg)+' kg</div></button>'; }).join('');
+  const sel = WST.sel!=null && pts[WST.sel] ? pts[WST.sel] : null;
+  $('#app').innerHTML =
+    '<header class="top"><div class="eyebrow">Gewicht</div><h1>Gewichtsverlauf</h1></header><div class="stack">'+
+    (S.weights.some(w=>w.ex)?'<div class="note">Zu sehen sind <b>Beispielwerte</b>. Sie verschwinden mit „Beispieldaten löschen“ unter <b>Heute</b>.</div>':'')+
+    '<section class="card stack">'+
+      (last?'<div class="spread wrap"><div class="kcal"><b class="num">'+fmtKg(last.kg)+'</b><span class="muted">kg</span></div><span class="muted small">zuletzt am '+esc(fmtDateLong(last.d))+'</span></div>':'<h2>Gewicht eintragen</h2>')+
+      '<form id="wf" class="stack" novalidate><div class="grid2"><label class="f">Gewicht in kg<input type="text" inputmode="decimal" id="wKg" placeholder="z. B. 64,5" autocomplete="off"></label><label class="f">Datum<input type="date" id="wD" value="'+t+'" max="'+t+'"></label></div><button class="btn" type="submit">Gewicht speichern</button></form>'+
+    '</section>'+
+    '<section class="card stack"><div class="spread wrap"><h2>Verlauf</h2><span class="small muted">'+(pts.length?fmtDateShort(WST.range==='all'?pts[0].d:from)+' – '+fmtDateShort(t):'')+'</span></div><div class="row wrap">'+chips+'</div>'+
+      (pts.length ? '<div id="wChart" style="overflow:hidden"></div><div class="small" aria-live="polite">'+(sel?'<b>'+esc(fmtDateLong(sel.d))+':</b> '+fmtKg(sel.kg)+' kg':'Tippen Sie auf einen Punkt für den genauen Wert.')+'</div>'+
+        '<div class="tile3"><div><b class="num">'+(ch!=null?signKg(ch):'–')+'</b><span>'+rangeLab+'</span></div><div><b class="num">'+(goal&&last?signKg(goal-last.kg):'–')+'</b><span>'+(goal?'bis zum Ziel ('+fmtKg(goal)+' kg)':'kein Zielgewicht')+'</span></div><div><b class="num">'+pts.length+'</b><span>Messungen</span></div></div>'
+      : '<div class="empty">'+(all.length?'In diesem Zeitraum gibt es keine Messungen.':'Tragen Sie oben Ihr Gewicht ein. Am besten immer zur gleichen Tageszeit, zum Beispiel morgens vor dem Frühstück.')+'</div>')+
+      '<button class="textbtn" id="wGoal" style="align-self:flex-start;padding-left:0">'+(goal?'Zielgewicht ändern':'Zielgewicht festlegen')+'</button></section>'+
+    (all.length?'<section class="stack"><h2>Messungen</h2><div class="list">'+listHtml+'</div>'+(desc.length>10&&!WST.all?'<button class="btn sec" id="wAll">Alle '+desc.length+' Messungen anzeigen</button>':'')+'</section>':'')+
+    '</div>';
+  $('#wf').onsubmit=e=>{ e.preventDefault(); const kg=parseKg($('#wKg').value), d=$('#wD').value||t;
+    if(kg==null){ toast('Bitte ein Gewicht zwischen 20 und 300 kg eingeben'); return; }
+    if(d>t){ toast('Das Datum liegt in der Zukunft'); return; }
+    const upd=saveWeight(d,kg); WST.sel=null; toast(upd?'Gewicht aktualisiert':'Gewicht gespeichert'); renderWeight(); };
+  $$('[data-wr]').forEach(b=>b.onclick=()=>{ const v=b.dataset.wr; WST.range=v==='all'?'all':+v; WST.sel=null; renderWeight(); });
+  const box=$('#wChart');
+  if(box){ box.innerHTML=weightChart(pts, WST.range==='all'?pts[0].d:from, t, Math.max(280,Math.floor(box.clientWidth))); $$('[data-w]',box).forEach(c=>c.onclick=()=>{ WST.sel=+c.dataset.w; renderWeight(); }); }
+  $('#wGoal').onclick=()=>openSheet(goalSheet);
+  if($('#wAll')) $('#wAll').onclick=()=>{ WST.all=true; renderWeight(); };
+  $$('[data-wid]').forEach(b=>b.onclick=()=>{ const w=S.weights.find(x=>x.id===b.dataset.wid); if(w) openSheet(bb=>weightEditSheet(bb,w)); });
+}
+function weightEditSheet(body,w){
+  body.innerHTML='<form class="stack" id="we" novalidate><label class="f">Gewicht in kg<input type="text" inputmode="decimal" id="weKg" value="'+fmtKg(w.kg)+'"></label><button class="btn" type="submit">Speichern</button><button class="btn danger" type="button" id="weDel">Messung löschen</button></form>';
+  $('#we',body).onsubmit=e=>{ e.preventDefault(); const kg=parseKg($('#weKg',body).value); if(kg==null){ toast('Bitte ein Gewicht zwischen 20 und 300 kg eingeben'); return; } w.kg=kg; delete w.ex; save(); closeSheet(); render(); toast('Gespeichert'); };
+  $('#weDel',body).onclick=async()=>{ if(await ask('Messung vom '+fmtDateLong(w.d)+' löschen?','Löschen',true)){ S.weights=S.weights.filter(x=>x.id!==w.id); WST.sel=null; save(); closeSheet(); render(); toast('Gelöscht'); } };
+  return {title:'Messung vom '+fmtDateShort(w.d)};
+}
+function goalSheet(body){
+  body.innerHTML='<form class="stack" id="gf" novalidate><div class="note">Das Zielgewicht erscheint als gestrichelte Linie im Diagramm. Im Alter ist ein stabiles Gewicht oft wichtiger als Abnehmen, deshalb ein Ziel am besten mit dem Arzt absprechen.</div><label class="f">Zielgewicht in kg<input type="text" inputmode="decimal" id="gKg" value="'+(S.goalKg?fmtKg(S.goalKg):'')+'"></label><button class="btn" type="submit">Speichern</button>'+(S.goalKg?'<button class="btn sec" type="button" id="gDel">Zielgewicht entfernen</button>':'')+'</form>';
+  $('#gf',body).onsubmit=e=>{ e.preventDefault(); const kg=parseKg($('#gKg',body).value); if(kg==null){ toast('Bitte ein Gewicht zwischen 20 und 300 kg eingeben'); return; } S.goalKg=kg; save(); closeSheet(); render(); toast('Zielgewicht gespeichert'); };
+  if($('#gDel',body)) $('#gDel',body).onclick=()=>{ S.goalKg=null; save(); closeSheet(); render(); toast('Zielgewicht entfernt'); };
+  return {title:'Zielgewicht'};
+}
+
 /* ---------- VERGLEICH ---------- */
 let CMP = []; try{ CMP = JSON.parse(localStorage.getItem(STORE+'-cmp')||'[]'); }catch(e){}
 let cmpPortion = false;
@@ -733,9 +831,9 @@ function downloadFile(name,text,type){
 function dataSheet(body){
   body.innerHTML = '<div class="stack">'+
     '<div class="note">Alle Daten liegen nur auf diesem Gerät. iPhone und iPad haben getrennte Tagebücher. Mit einer Sicherung können Sie Daten aufbewahren oder auf das andere Gerät übertragen (z. B. per AirDrop oder Nachricht schicken und dort hier importieren).</div>'+
-    '<div class="card stack"><h2>Sicherung erstellen</h2><div class="small muted">'+S.entries.filter(e=>!e.ex).length+' Einträge, '+S.custom.length+' eigene Lebensmittel, '+S.recipes.length+' Speisen</div><button class="btn" id="dExp">Sicherung speichern oder teilen</button></div>'+
+    '<div class="card stack"><h2>Sicherung erstellen</h2><div class="small muted">'+S.entries.filter(e=>!e.ex).length+' Einträge, '+S.custom.length+' eigene Lebensmittel, '+S.recipes.length+' Speisen, '+S.weights.filter(w=>!w.ex).length+' Gewichtswerte</div><button class="btn" id="dExp">Sicherung speichern oder teilen</button></div>'+
     '<div class="card stack"><h2>Sicherung einspielen</h2><label class="btn sec" style="display:block;text-align:center">Sicherungsdatei auswählen<input type="file" id="dImp" accept=".json,application/json" hidden></label><div id="impMsg"></div></div>'+
-    '<div class="card stack"><h2>Als Tabelle exportieren</h2><div class="small muted">Alle Einträge mit Nährwerten als CSV-Datei, zum Beispiel für den Arzt oder für Excel und Numbers.</div><button class="btn sec" id="dCsv">Tabelle exportieren</button></div>'+
+    '<div class="card stack"><h2>Als Tabelle exportieren</h2><div class="small muted">Alle Einträge mit Nährwerten als CSV-Datei, zum Beispiel für den Arzt oder für Excel und Numbers.</div><button class="btn sec" id="dCsv">Mahlzeiten als Tabelle exportieren</button><button class="btn sec" id="dWcsv">Gewichtsverlauf als Tabelle exportieren</button></div>'+
     '<button class="btn danger" id="dDel">Alle Daten löschen</button></div>';
   $('#dExp',body).onclick=()=>downloadFile('tagesteller-sicherung-'+today()+'.json',JSON.stringify(S),'application/json');
   $('#dCsv',body).onclick=()=>{
@@ -744,6 +842,7 @@ function dataSheet(body){
     const csv='﻿'+[head,...rows].map(r=>r.map(c=>{ let s=typeof c==='number'?String(c).replace('.',','):String(c==null?'':c); return /[;"\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s; }).join(';')).join('\r\n');
     downloadFile('tagesteller-eintraege-'+today()+'.csv',csv,'text/csv');
   };
+  $('#dWcsv',body).onclick=()=>{ const rows=[['Datum','Gewicht (kg)'],...weightsSorted().filter(w=>!w.ex).map(w=>[w.d,String(w.kg).replace('.',',')])]; downloadFile('tagesteller-gewicht-'+today()+'.csv','﻿'+rows.map(r=>r.join(';')).join('\r\n'),'text/csv'); };
   $('#dImp',body).onchange=e=>{
     const file=e.target.files[0]; if(!file) return; const rd=new FileReader();
     rd.onload=async()=>{ let o; try{ o=JSON.parse(rd.result); }catch(err){ o=null; }
@@ -756,7 +855,7 @@ function dataSheet(body){
       $('#iRepl',w).onclick=()=>{ const b=blank(); Object.assign(b,o); b.targets=Object.assign({},DGE_W65,o.targets||{}); S=b; done('Sicherung eingespielt'); };
       $('#iMerge',w).onclick=()=>{
         const merge=(a,b,key)=>{ const ids=new Set(a.map(x=>x[key])); (b||[]).forEach(x=>{ if(!ids.has(x[key])) a.push(x); }); };
-        merge(S.entries,o.entries,'id'); merge(S.custom,o.custom,'id'); merge(S.recipes,o.recipes,'id'); merge(S.saved,o.saved,'code');
+        merge(S.entries,o.entries,'id'); merge(S.custom,o.custom,'id'); merge(S.recipes,o.recipes,'id'); merge(S.saved,o.saved,'code'); merge(S.weights,o.weights,'d'); if(!S.goalKg && o.goalKg) S.goalKg=o.goalKg;
         (o.fav||[]).forEach(k=>{ if(!S.fav.includes(k)) S.fav.push(k); }); done('Daten zusammengeführt'); };
     };
     rd.readAsText(file);
@@ -796,6 +895,8 @@ function loadDemo(){
     const pick = m=>{ const opts=plan.filter(p=>p[0]===m); return opts[Math.floor(rnd()*opts.length)]; };
     ['fr','mi','ab','sn'].forEach(m=>{ if(m==='sn'&&rnd()<.3) return; if(i===0 && m!=='fr') return; pick(m).slice(1).forEach(([nm,g])=>{ const f=byName[nm]; if(f) S.entries.push({id:uid(),d,m,key:f.key,name:f.name,g,n:Object.assign({},f.n),ex:true}); }); });
   }
+  for(let i=84;i>=0;i--){ if(i!==0 && rnd()<.6) continue; const d=addDays(t,-i); if(S.weights.some(w=>w.d===d)) continue;
+    S.weights.push({id:uid(),d,kg:Math.round((66.1+i*0.017+(rnd()-.5)*0.6)*10)/10,ex:true}); }
   S.welcomed = true; save(); render(); toast('Beispieldaten geladen');
 }
 

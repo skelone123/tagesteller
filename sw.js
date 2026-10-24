@@ -1,5 +1,5 @@
 // Offline-Speicher für Tagesteller. Bei Änderungen an der App die Versionsnummer erhöhen.
-const CACHE = 'tagesteller-v1';
+const CACHE = 'tagesteller-v2';
 const FILES = ['./', './index.html', './foods.js', './manifest.json',
   './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
 
